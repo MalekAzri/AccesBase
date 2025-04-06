@@ -89,3 +89,47 @@ class AttackPokemon {
              $this->attackPokemon.getAttackMinimal() + " et " + $this->attackPokemon.getAttackMaximal() + " points de dégats") ;
         }
     }
+<<<<<<< HEAD
+=======
+
+    class PokemonFeu extends Pokemon{ 
+        function __construct(string $name, string $url, int $hp, string $type , AttackPokemon $attackPokemon) {
+            parent::__construct($name, $url, $hp, "Feu", $attackPokemon);
+        }
+        
+        function whoAmI(){ 
+            echo("Je suis un pokemon de type feu") ; 
+            parent::whoAmI() ; 
+        }
+    }
+    
+    class PokemonEau extends Pokemon{ 
+        function __construct(string $name, string $url, int $hp, string $type , AttackPokemon $attackPokemon) {
+            parent::__construct($name, $url, $hp , "Eau" , $attackPokemon);
+        }
+    
+        function attack(Pokemon $p){
+            parent::attack($p); 
+            if ($p instanceof PokemonPlante) { 
+                echo $this->name . " attaque " . $p->getName() . " avec une attaque spéciale\n"; 
+                $p->setHP($p->getHP() - (int)($p->getHP() / 2)); 
+                echo $p->getName() . " a maintenant " . $p->getHP() . " HP\n";
+            }
+        
+                $p.setHP(p.getHP()-p.getHP()/2) ; 
+                echo(p.getName() + " a maintenant " + p.getHP() + "HP ") ;
+            
+        }}
+
+    class PokemonPlante extends Pokemon{ 
+        function __construct(string $name, string $url, int $hp, string $type ,AttackPokemon $attackPokemon) {
+            parent::__construct($name, $url, $hp, "Plante",  $attackPokemon);
+        }
+        function whoAmI(){ 
+            echo("Je suis un pokemon de type plante") ; 
+            parent::whoAmI() ; 
+        }
+    }
+
+?>
+>>>>>>> e7c444a (classes)
