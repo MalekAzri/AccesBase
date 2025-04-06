@@ -223,9 +223,7 @@
             </form>
         </div>
         
-        <div class="code-container">
-            <h3 style="color: #f8f8f2;">Code PHP utilisé:</h3>
-            <pre style="color: #f8f8f2;">
+    
 
 
 
