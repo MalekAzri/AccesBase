@@ -12,11 +12,17 @@
             padding: 20px;
             background-color: #f9f9f9;
         }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        .players-container {
+        display: flex;
+        justify-content: space-between; /* Place un joueur à gauche et l'autre à droite */
+        margin-bottom: 20px;
+        }
+        .player-card {
+            width: 45%; /* Chaque joueur occupe 45% de la largeur */
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             color: #e74c3c;
@@ -110,21 +116,21 @@
         require_once 'Pokemon.php';
         
         
-        $attack = new AttackPokemon(10, 100, 2, 20);
-        $dracaufeu1 = new PokemonFeu("Dracaufeu Gigamus", "https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png", 200, "Feu", $attack);
+        $attack = new AttackPokemon(100, 200, 2, 20);
+        $pokemon1 = new PokemonFeu("Dracaufeu ", "https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png", 200, "Feu", $attack);
         
-        $attack2 = new AttackPokemon(10, 80, 4, 20);
-        $dracaufeu2 = new PokemonFeu("Dracaufeu Gigamus", "https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png", 200, "Feu", $attack2);
+        $attack2 = new AttackPokemon(100, 300, 4, 20);
+        $pokemon2 = new PokemonEau("DracauWater ", "https://www.pokebip.com/membres/galeries/1698/1698797421018135400.png", 200, "Eau", $attack2);
         
         
         echo '<div class="pokemon-card">';
         echo '  <div class="pokemon-image">';
-        $dracaufeu1->displayImage();
+        $pokemon1->displayImage();
         echo '  </div>';
         echo '  <div class="pokemon-info">';
-        echo '    <h2>' . $dracaufeu1->getName() . '</h2>';
+        echo '    <h2>' . $pokemon1->getName() . '</h2>';
         echo '    <div class="stats">';
-        echo '      <p>- Points: ' . $dracaufeu1->getHp() . '</p>';
+        echo '      <p>- Points: ' . $pokemon1->getHp() . '</p>';
         echo '      <p>- Min Attack: ' . $attack->getAttackMinimal() . '</p>'; 
         echo '      <p>- Max Attack: ' . $attack->getAttackMaximal() . '</p>'; 
         echo '      <p>- Special Attack: ' . $attack->getSpecialAttack() . '</p>';
@@ -135,51 +141,71 @@
         
         echo '<div class="pokemon-card">';
         echo '  <div class="pokemon-image">';
-        $dracaufeu2->displayImage();
+        $pokemon2->displayImage();
         echo '  </div>';
         echo '  <div class="pokemon-info">';
-        echo '    <h2>' . $dracaufeu2->getName() . '</h2>';
+        echo '    <h2>' . $pokemon2->getName() . '</h2>';
         echo '    <div class="stats">';
-        echo '      <p>- Points: ' . $dracaufeu2->getHp() . '</p>';
-        echo '      <p>- Min Attack: ' . $attack2->getMinAttack() . '</p>';
-        echo '      <p>- Max Attack: ' . $attack2->getMaxAttack() . '</p>';
+        echo '      <p>- Points: ' . $pokemon2->getHp() . '</p>';
+        echo '      <p>- Min Attack: ' . $attack2->getAttackMinimal() . '</p>'; 
+        echo '      <p>- Max Attack: ' . $attack2->getAttackMaximal() . '</p>'; 
         echo '      <p>- Special Attack: ' . $attack2->getSpecialAttack() . '</p>';
-        echo '      <p>- Special Probability: ' . $attack2->getSpecialProbability() . '%</p>';
+        echo '      <p>- Special Probability: ' . $attack2->getProbabilitySpecialAttack() . '%</p>';
         echo '    </div>';
         echo '  </div>';
         echo '</div>';
         
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          
             $rounds = isset($_POST['rounds']) ? (int)$_POST['rounds'] : 1;
+
             echo '<h2>Résultats du combat</h2>';
             echo '<table>';
-            echo '<tr><th>Round</th><th>Attaque</th><th>Défense</th><th>Dégâts</th><th>Points restants</th></tr>';
-            
+            echo '<tr><th>Round</th><th>Attaquant</th><th>Défenseur</th><th>Dégâts infligés</th><th>Points restants</th></tr>';
+
+           
             for ($i = 1; $i <= $rounds; $i++) {
-                $attackValue1 = $dracaufeu1->attack(1); // Pass appropriate argument
-                $attackValue2 = $dracaufeu2->attack(1); // Pass appropriate argument
-            
                 
+                if ($pokemon1->getHp() <= 0 || $pokemon2->getHp() <= 0) {
+                    break;
+                }
+
+                
+                if ($pokemon1->getHp() < $pokemon2->getHp()) {
+                
+                    $attacker = $pokemon2->getName();
+                    $defender = $pokemon1->getName();
+                    $pokemon2->attack($pokemon1);
+                    
+                } else {
+                     
+                    $attacker = $pokemon1->getName();
+                    $defender = $pokemon2->getName();
+                    $pokemon1->attack($pokemon2);
+                }
+
+               
                 echo '<tr>';
-                echo '<td>' . $i . '</td>';
-                echo '<td>' . $attackValue1 . '</td>';
-                echo '<td>' . $attackValue2 . '</td>';
-                echo '<td>' . $attackValue1 . ' / ' . $attackValue2 . '</td>';
-                echo '<td>' . $dracaufeu1->getHp() . ' / ' . $dracaufeu2->getHp() . '</td>';
+                echo '<td>' . $i . '</td>'; 
+                echo '<td>' . $attacker . '</td>'; 
+                echo '<td>' . $defender . '</td>'; 
+                echo '<td>' . $pokemon1->getHp() . ' / ' . $pokemon2->getHp() . '</td>'; 
                 echo '</tr>';
-                
-                if ($dracaufeu1->getHp() <= 0 || $dracaufeu2->getHp() <= 0) {
+
+                // Vérification si l'un des Pokémon est KO après l'attaque
+                if ($pokemon1->getHp() <= 0 || $pokemon2->getHp() <= 0) {
                     break;
                 }
             }
-            
+
             echo '</table>';
-            
-            if ($dracaufeu1->getHp() > $dracaufeu2->getHp()) {
-                echo '<p style="color: green; font-weight: bold;">' . $dracaufeu1->getName() . ' a gagné le combat!</p>';
-            } elseif ($dracaufeu2->getHp() > $dracaufeu1->getHp()) {
-                echo '<p style="color: green; font-weight: bold;">' . $dracaufeu2->getName() . ' a gagné le combat!</p>';
+
+            // Affichage du gagnant ou match nul
+            if ($pokemon1->getHp() > $pokemon2->getHp()) {
+                echo '<p style="color: green; font-weight: bold;">' . $pokemon1->getName() . ' a gagné le combat!</p>';
+            } elseif ($pokemon2->getHp() > $pokemon1->getHp()) {
+                echo '<p style="color: green; font-weight: bold;">' . $pokemon2->getName() . ' a gagné le combat!</p>';
             } else {
                 echo '<p style="color: blue; font-weight: bold;">Match nul!</p>';
             }
@@ -200,31 +226,9 @@
         <div class="code-container">
             <h3 style="color: #f8f8f2;">Code PHP utilisé:</h3>
             <pre style="color: #f8f8f2;">
-<?php
-require_once 'Pokemon.php';
-
-$attack = new AttackPokemon(10, 100, 2, 20);
-$dracaufeu1 = new PokemonFeu("Dracaufeu Gigamus", "pokemon.png", 200, "Feu", $attack);
-
-$attack2 = new AttackPokemon(10, 80, 4, 20);
-$dracaufeu2 = new PokemonFeu("Dracaufeu Gigamus", "pokemon.png", 200, "Feu", $attack2);
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $rounds = (int)$_POST['rounds'];
-    
-    for ($i = 1; $i <= $rounds; $i++) {
-        $attackValue1 = $dracaufeu1->attack();
-        $attackValue2 = $dracaufeu2->attack();
-        
-        $dracaufeu2->takeDamage($attackValue1);
-        $dracaufeu1->takeDamage($attackValue2);
-        
-        if ($dracaufeu1->getHp() <= 0 || $dracaufeu2->getHp() <= 0) {
-            break;
-        }
-    }
-} ?>
+
             </pre>
         </div>
     </div>
