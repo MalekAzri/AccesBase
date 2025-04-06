@@ -1,115 +1,232 @@
-<?php
-require_once 'Pokemon.php'; // Inclure le fichier contenant les classes Pokémon
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupérer les données des Pokémon depuis le formulaire
-    $name1 = $_POST['pokemon1'];
-    $hp1 = intval($_POST['hp1']);
-    $type1 = $_POST['type1'];
-
-    $name2 = $_POST['pokemon2'];
-    $hp2 = intval($_POST['hp2']);
-    $type2 = $_POST['type2'];
-
-    // Créer les objets AttackPokemon pour chaque Pokémon
-    $attack1 = new AttackPokemon(10, 20, 2, 30); // Exemple d'attaques pour Pokémon 1
-    $attack2 = new AttackPokemon(15, 25, 3, 40); // Exemple d'attaques pour Pokémon 2
-
-    // Créer les objets Pokémon en fonction de leur type
-    $pokemon1 = match ($type1) {
-        'Plante' => new PokemonFeu($name1, 'https://www.pokemon.com/fr/pokedex/brindibou', $hp1, $type1, $attack1),
-        'Eau' => new PokemonEau($name1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.cnn.com%2Fstyle%2Farticle%2Fpokemon-design-25%2Findex.html&psig=AOvVaw0iBik7aR1ZpIYy7MvSWsMy&ust=1743986678288000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCa1uqWwowDFQAAAAAdAAAAABAJ', $hp1, $type1, $attack1),
-        'Feu' => new PokemonPlante($name1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.businessinsider.com%2Fevery-pokemon-in-pokemon-go-list-2016-8&psig=AOvVaw0iBik7aR1ZpIYy7MvSWsMy&ust=1743986678288000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCa1uqWwowDFQAAAAAdAAAAABAP', $hp1, $type1, $attack1),
-        default => new Pokemon($name1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nintendo.com%2Ffr-fr%2FNews%2F2016%2FAout%2FQue-sont-les-Pokemon-Decouvrez-tout-ce-qu-il-faut-savoir-sur-le-phenomene-Pokemon--1128960.html&psig=AOvVaw0iBik7aR1ZpIYy7MvSWsMy&ust=1743986678288000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCa1uqWwowDFQAAAAAdAAAAABAV', $hp1, $type1, $attack1),
-    };
-
-    $pokemon2 = match ($type2) {
-        'Feu' => new PokemonFeu($name2, '', $hp2, $type2, $attack2),
-        'Eau' => new PokemonEau($name2, '', $hp2, $type2, $attack2),
-        'Plante' => new PokemonPlante($name2, '', $hp2, $type2, $attack2),
-        default => new Pokemon($name2, '', $hp2, $type2, $attack2),
-    };
-
-    // Simuler une attaque
-    ob_start(); // Capturer la sortie
-    $pokemon1->attack($pokemon2);
-    $result = ob_get_clean(); // Récupérer la sortie
-}
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu Pokémon</title>
+    <title>Combat Pokémon - Dracaufeu Gigamus</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
         }
-        .pokemon-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .pokemon {
-            border: 1px solid #ccc;
+        .container {
+            background-color: white;
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #e74c3c;
+            text-align: center;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .pokemon-card {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .pokemon-image {
+            width: 150px;
+            margin-right: 20px;
+        }
+        .pokemon-image img {
+            width: 100%;
+            height: auto;
+        }
+        .pokemon-info {
+            flex: 1;
+        }
+        .stats {
+            margin-left: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .combat-form {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #eaf2f8;
+            border-radius: 8px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 8px;
             width: 200px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
         button {
-            margin-top: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
             padding: 10px 20px;
-            font-size: 16px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .code-container {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-    <h1>Jeu Pokémon</h1>
-    <p>Sélectionnez deux Pokémon et lancez le combat !</p>
-
-    <form method="POST">
-        <div class="pokemon-container">
-            <div class="pokemon">
-                <h3>Pokémon 1</h3>
-                <label for="pokemon1">Nom :</label>
-                <input type="text" id="pokemon1" name="pokemon1" placeholder="Nom du Pokémon 1" required><br><br>
-                <label for="hp1">HP :</label>
-                <input type="number" id="hp1" name="hp1" placeholder="Points de vie" required><br><br>
-                <label for="type1">Type :</label>
-                <select id="type1" name="type1">
-                    <option value="Feu">Feu</option>
-                    <option value="Eau">Eau</option>
-                    <option value="Plante">Plante</option>
-                    <option value="Normal">Normal</option>
-                </select>
-            </div>
-            <div class="pokemon">
-                <h3>Pokémon 2</h3>
-                <label for="pokemon2">Nom :</label>
-                <input type="text" id="pokemon2" name="pokemon2" placeholder="Nom du Pokémon 2" required><br><br>
-                <label for="hp2">HP :</label>
-                <input type="number" id="hp2" name="hp2" placeholder="Points de vie" required><br><br>
-                <label for="type2">Type :</label>
-                <select id="type2" name="type2">
-                    <option value="Feu">Feu</option>
-                    <option value="Eau">Eau</option>
-                    <option value="Plante">Plante</option>
-                    <option value="Normal">Normal</option>
-                </select>
-            </div>
+    <div class="container">
+        <?php
+        require_once 'Pokemon.php';
+        
+        
+        $attack = new AttackPokemon(10, 100, 2, 20);
+        $dracaufeu1 = new PokemonFeu("Dracaufeu Gigamus", "https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png", 200, "Feu", $attack);
+        
+        $attack2 = new AttackPokemon(10, 80, 4, 20);
+        $dracaufeu2 = new PokemonFeu("Dracaufeu Gigamus", "https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png", 200, "Feu", $attack2);
+        
+        
+        echo '<div class="pokemon-card">';
+        echo '  <div class="pokemon-image">';
+        $dracaufeu1->displayImage();
+        echo '  </div>';
+        echo '  <div class="pokemon-info">';
+        echo '    <h2>' . $dracaufeu1->getName() . '</h2>';
+        echo '    <div class="stats">';
+        echo '      <p>- Points: ' . $dracaufeu1->getHp() . '</p>';
+        echo '      <p>- Min Attack: ' . $attack->getAttackMinimal() . '</p>'; 
+        echo '      <p>- Max Attack: ' . $attack->getAttackMaximal() . '</p>'; 
+        echo '      <p>- Special Attack: ' . $attack->getSpecialAttack() . '</p>';
+        echo '      <p>- Special Probability: ' . $attack->getProbabilitySpecialAttack() . '%</p>';
+        echo '    </div>';
+        echo '  </div>';
+        echo '</div>';
+        
+        echo '<div class="pokemon-card">';
+        echo '  <div class="pokemon-image">';
+        $dracaufeu2->displayImage();
+        echo '  </div>';
+        echo '  <div class="pokemon-info">';
+        echo '    <h2>' . $dracaufeu2->getName() . '</h2>';
+        echo '    <div class="stats">';
+        echo '      <p>- Points: ' . $dracaufeu2->getHp() . '</p>';
+        echo '      <p>- Min Attack: ' . $attack2->getMinAttack() . '</p>';
+        echo '      <p>- Max Attack: ' . $attack2->getMaxAttack() . '</p>';
+        echo '      <p>- Special Attack: ' . $attack2->getSpecialAttack() . '</p>';
+        echo '      <p>- Special Probability: ' . $attack2->getSpecialProbability() . '%</p>';
+        echo '    </div>';
+        echo '  </div>';
+        echo '</div>';
+        
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $rounds = isset($_POST['rounds']) ? (int)$_POST['rounds'] : 1;
+            echo '<h2>Résultats du combat</h2>';
+            echo '<table>';
+            echo '<tr><th>Round</th><th>Attaque</th><th>Défense</th><th>Dégâts</th><th>Points restants</th></tr>';
+            
+            for ($i = 1; $i <= $rounds; $i++) {
+                $attackValue1 = $dracaufeu1->attack(1); // Pass appropriate argument
+                $attackValue2 = $dracaufeu2->attack(1); // Pass appropriate argument
+            
+                
+                echo '<tr>';
+                echo '<td>' . $i . '</td>';
+                echo '<td>' . $attackValue1 . '</td>';
+                echo '<td>' . $attackValue2 . '</td>';
+                echo '<td>' . $attackValue1 . ' / ' . $attackValue2 . '</td>';
+                echo '<td>' . $dracaufeu1->getHp() . ' / ' . $dracaufeu2->getHp() . '</td>';
+                echo '</tr>';
+                
+                if ($dracaufeu1->getHp() <= 0 || $dracaufeu2->getHp() <= 0) {
+                    break;
+                }
+            }
+            
+            echo '</table>';
+            
+            if ($dracaufeu1->getHp() > $dracaufeu2->getHp()) {
+                echo '<p style="color: green; font-weight: bold;">' . $dracaufeu1->getName() . ' a gagné le combat!</p>';
+            } elseif ($dracaufeu2->getHp() > $dracaufeu1->getHp()) {
+                echo '<p style="color: green; font-weight: bold;">' . $dracaufeu2->getName() . ' a gagné le combat!</p>';
+            } else {
+                echo '<p style="color: blue; font-weight: bold;">Match nul!</p>';
+            }
+        }
+        ?>
+        
+        <div class="combat-form">
+            <h2>Configuration du combat</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="rounds">Nombre de rounds:</label>
+                    <input type="number" id="rounds" name="rounds" value="1" min="1" max="10">
+                </div>
+                <button type="submit">Lancer le combat</button>
+            </form>
         </div>
+        
+        <div class="code-container">
+            <h3 style="color: #f8f8f2;">Code PHP utilisé:</h3>
+            <pre style="color: #f8f8f2;">
+<?php
+require_once 'Pokemon.php';
 
-        <button type="submit">Lancer le combat</button>
-    </form>
+$attack = new AttackPokemon(10, 100, 2, 20);
+$dracaufeu1 = new PokemonFeu("Dracaufeu Gigamus", "pokemon.png", 200, "Feu", $attack);
 
-    <div id="result" style="margin-top: 20px;">
-        <?php if (!empty($result)) echo nl2br($result); ?>
+$attack2 = new AttackPokemon(10, 80, 4, 20);
+$dracaufeu2 = new PokemonFeu("Dracaufeu Gigamus", "pokemon.png", 200, "Feu", $attack2);
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $rounds = (int)$_POST['rounds'];
+    
+    for ($i = 1; $i <= $rounds; $i++) {
+        $attackValue1 = $dracaufeu1->attack();
+        $attackValue2 = $dracaufeu2->attack();
+        
+        $dracaufeu2->takeDamage($attackValue1);
+        $dracaufeu1->takeDamage($attackValue2);
+        
+        if ($dracaufeu1->getHp() <= 0 || $dracaufeu2->getHp() <= 0) {
+            break;
+        }
+    }
+} ?>
+            </pre>
+        </div>
     </div>
 </body>
 </html>
