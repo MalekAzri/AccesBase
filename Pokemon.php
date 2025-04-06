@@ -70,11 +70,12 @@ class AttackPokemon {
         }
 
         function whoAmI() {
-            echo "Je suis un Pokemon de type " . $this->type . "\n";
+            echo ("Je suis " . $this->name . " avec " . $this->hp . " HP et je fais des attaques entre " . $this->attackPokemon->getAttackMinimal() . 
+            " et " . $this->attackPokemon->getAttackMaximal() . " points de dégâts\n");
         }
+        
 
-        function attack(Pokemon $p){
-
+        function attack(Pokemon $p) {
             $attackpoints = rand($this->attackPokemon->getAttackMinimal(), $this->attackPokemon->getAttackMaximal());
             $chance = rand(0, 100); 
             if ($chance <= $this->attackPokemon->getProbabilitySpecialAttack()) {
@@ -84,14 +85,10 @@ class AttackPokemon {
             $p->setHP($p->getHP() - $attackpoints);
             echo $this->name . " attaque " . $p->getName() . "\n";
             echo $p->getName() . " a maintenant " . $p->getHP() . " HP\n";
-                
-        
+    
             $p->setHP($p->getHP() - $attackpoints);
-            echo($this->name + "attaque" + $p->getName() );
-            echo($p->getName() + " a maintenant " + $p->getHP() + "HP ") ;
-            echo ("Je suis " + $this->name + " avec " . $this->hp . " HP et je fais des attaques entre " . $this->attackPokemon->getAttackMinimal() . 
-            " et " . $this->attackPokemon->getAttackMaximal() . " points de dégâts\n" + $this->hp + "HP et je fais des attaques entre " .
-             $this->attackPokemon->getAttackMinimal() . " et " + $this->attackPokemon->getAttackMaximal() . " points de dégats") ;
+            echo($this->name . " attaque " . $p->getName());
+            echo($p->getName() . " a maintenant " . $p->getHP() . " HP");
         }
     }
 
