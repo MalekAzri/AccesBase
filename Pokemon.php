@@ -66,7 +66,12 @@ class AttackPokemon {
             $this->hp=$hp ; 
         }
         function setAttackPokemon(AttackPokemon $attackPokemon){ 
-            $this->attackPokemon=$attackPokemon ; }
+            $this->attackPokemon=$attackPokemon ; 
+        }
+
+        function whoAmI() {
+            echo "Je suis un Pokemon de type " . $this->type . "\n";
+        }
 
         function attack(Pokemon $p){
 
@@ -81,16 +86,15 @@ class AttackPokemon {
             echo $p->getName() . " a maintenant " . $p->getHP() . " HP\n";
                 
         
-            p.setHP(p.getHP()-$attackpoints) ;
-            echo($this->name + "attaque" + $p.getName() );
-            echo($p.getName() + " a maintenant " + $p.getHP() + "HP ") ;
-            echo ("Je suis " + $this->name + " avec " + $this->hp + " HP et je fais des attaques entre " + $this->attackPokemon->getAttackMinimal() . 
-            " et " + $this->attackPokemon->getAttackMaximal() + " points de dégâts\n" + $this->hp + "HP et je fais des attaques entre " +
-             $this->attackPokemon.getAttackMinimal() + " et " + $this->attackPokemon.getAttackMaximal() + " points de dégats") ;
+            $p->setHP($p->getHP() - $attackpoints);
+            echo($this->name + "attaque" + $p->getName() );
+            echo($p->getName() + " a maintenant " + $p->getHP() + "HP ") ;
+            echo ("Je suis " + $this->name + " avec " . $this->hp . " HP et je fais des attaques entre " . $this->attackPokemon->getAttackMinimal() . 
+            " et " . $this->attackPokemon->getAttackMaximal() . " points de dégâts\n" + $this->hp + "HP et je fais des attaques entre " .
+             $this->attackPokemon->getAttackMinimal() . " et " + $this->attackPokemon->getAttackMaximal() . " points de dégats") ;
         }
     }
-<<<<<<< HEAD
-=======
+
 
     class PokemonFeu extends Pokemon{ 
         function __construct(string $name, string $url, int $hp, string $type , AttackPokemon $attackPokemon) {
@@ -116,8 +120,8 @@ class AttackPokemon {
                 echo $p->getName() . " a maintenant " . $p->getHP() . " HP\n";
             }
         
-                $p.setHP(p.getHP()-p.getHP()/2) ; 
-                echo(p.getName() + " a maintenant " + p.getHP() + "HP ") ;
+                $p->setHP($p->getHP() - (int)($p->getHP() / 2)); 
+                echo $p->getName() . " a maintenant " . $p->getHP() . " HP\n";
             
         }}
 
@@ -132,4 +136,4 @@ class AttackPokemon {
     }
 
 ?>
->>>>>>> e7c444a (classes)
+
