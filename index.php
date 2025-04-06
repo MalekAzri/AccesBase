@@ -17,10 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Créer les objets Pokémon en fonction de leur type
     $pokemon1 = match ($type1) {
-        'Feu' => new PokemonFeu($name1, '', $hp1, $type1, $attack1),
-        'Eau' => new PokemonEau($name1, '', $hp1, $type1, $attack1),
-        'Plante' => new PokemonPlante($name1, '', $hp1, $type1, $attack1),
-        default => new Pokemon($name1, '', $hp1, $type1, $attack1),
+        'Plante' => new PokemonFeu($name1, 'https://www.pokemon.com/fr/pokedex/brindibou', $hp1, $type1, $attack1),
+        'Eau' => new PokemonEau($name1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.cnn.com%2Fstyle%2Farticle%2Fpokemon-design-25%2Findex.html&psig=AOvVaw0iBik7aR1ZpIYy7MvSWsMy&ust=1743986678288000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCa1uqWwowDFQAAAAAdAAAAABAJ', $hp1, $type1, $attack1),
+        'Feu' => new PokemonPlante($name1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.businessinsider.com%2Fevery-pokemon-in-pokemon-go-list-2016-8&psig=AOvVaw0iBik7aR1ZpIYy7MvSWsMy&ust=1743986678288000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCa1uqWwowDFQAAAAAdAAAAABAP', $hp1, $type1, $attack1),
+        default => new Pokemon($name1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nintendo.com%2Ffr-fr%2FNews%2F2016%2FAout%2FQue-sont-les-Pokemon-Decouvrez-tout-ce-qu-il-faut-savoir-sur-le-phenomene-Pokemon--1128960.html&psig=AOvVaw0iBik7aR1ZpIYy7MvSWsMy&ust=1743986678288000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCa1uqWwowDFQAAAAAdAAAAABAV', $hp1, $type1, $attack1),
     };
 
     $pokemon2 = match ($type2) {
@@ -89,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="Normal">Normal</option>
                 </select>
             </div>
-
             <div class="pokemon">
                 <h3>Pokémon 2</h3>
                 <label for="pokemon2">Nom :</label>
