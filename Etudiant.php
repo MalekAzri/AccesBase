@@ -7,7 +7,7 @@ class Etudiant extends User {
     public static ConnexionBD $pdo;//connexion a la base de donnees
     public static Repository $repoEtudiant; // repository pour les etudiants
 //je vais considerer que le username est le nom de l'etudiant
-
+public static Repository $repoSection; // repository pour les sections
     public function __construct($id, $name, $email, $birthday,$image, $section) {
         parent::__construct($id, $name, $email, "etudiant");
         $this->birthday = $birthday;
@@ -17,6 +17,7 @@ class Etudiant extends User {
           if (self::$pdo === null) {
             self::$pdo = ConnexionBD::getInstance(); // Initialisation de PDO si ce n'est pas déjà fait
             self::$repoEtudiant = new Repository("etudiant", self::$pdo); // Initialisation du repository
+            self::$repoSection = new Repository("section", self::$pdo); // Initialisation du repository pour les sections
         }
 
     }
@@ -39,6 +40,14 @@ class Etudiant extends User {
     public function getEtudiantById($id){//un etudiant peut voir un etudiant par son id
         return self::$repoEtudiant->findById($id);
     }
+    public function getSections(){//un etudiant peut voir toutes les sections
+        return self::$repoSection->findAll();
+    }
+    public function getSectionById($id){//un etudiant peut voir une section par son id
+        return self::$repoSection->findById($id);
+    }
+    
+
 
 
 }
