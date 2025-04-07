@@ -1,8 +1,8 @@
 <?php
 include "autoloader.php";
+$_bdd = ConnexionBD::getInstance(); //instanciation d'une base de donnee
 //requete pour recuperer les etudiants
-$_bdd = ConnexionBD::getInstance();
-$rep = $_bdd->query("SELECT * FROM student");
+$rep = $_bdd->query("SELECT * FROM student"); 
 $students = $rep->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
