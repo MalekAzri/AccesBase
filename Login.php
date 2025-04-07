@@ -1,6 +1,6 @@
 
 <?php
-session_start();
+
 session_start();
 if (!isset($_SESSION["utilisateurs"])) {
     $_SESSION["utilisateurs"] = [];
@@ -64,30 +64,35 @@ if(isset($_POST["connect"])){
 
             if($user['username']!=$_POST['username'] ){
                 echo "Nom d'utilisateur incorrect";
+                exit;
             }
             elseif($user['email']!=$_POST['email']){
                 echo "Email incorrect";
+                exit;
 
             } 
             elseif($user['role']!=$_POST['role'] ){
                 echo "Rôle incorrect";
+                exit;
             }
             elseif($user['password']!=$_POST['password']){
                 echo "Mot de passe incorrect";
+                exit;
             }
             else{
                 echo "Vous êtes connecté";
-                header("Location: Platform.php");
-                exit;
+                redirect();
             }
         }
 
     }
+if($trouve == false){
+    
     echo "<div class=\"alert alert-danger\" role=\"alert\">
     utilisateur non trouvé!
 </div>";
-
-
+}
+    
 
 }
 if(isset($_POST["sign"])){
@@ -107,8 +112,18 @@ if(isset($_POST["sign"])){
         'password' => $_POST['password']
     ];
     array_push($_SESSION['utilisateurs'], $user);
-     header("Location: Platform.php");
-     exit;
+    redirect();
 }
   
+
+
+function redirect():void{
+    if( $_POST['role'] == 'admin'){
+        header("Location: AdminPage.php");
+        exit;
+    }else{
+        header("Location: EtudiantPage.php");
+        exit;
+    }
+}
 ?>

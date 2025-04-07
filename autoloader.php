@@ -14,4 +14,9 @@ function load3(String $Etudiant){
 }
 spl_autoload_register("load3");
 
+function load4 (String $Repository){
+    include_once "Repository.php";
+}
+spl_autoload_register("load4");
+
 ?>

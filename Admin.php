@@ -2,10 +2,10 @@
 include "autoloader.php";
  class Admin extends User {
 
-    public static $pdo; // connexion a la base de donnees
-    public static  $repoEtudiant; // repository pour les etudiants
+    public static ConnexionBD $pdo; // connexion a la base de donnees
+    public static Repository $repoEtudiant; // repository pour les etudiants
 
-    public static $repoSection;
+    public static Repository $repoSection;
 
     public function __construct($id, $name, $email, $role) {	
         parent::__construct($id, $name, $email, "admin"); // je considere que le username est le nom de l'administrateur
