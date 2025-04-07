@@ -6,15 +6,11 @@ if ($id === null) {
     echo "Aucun etudiant selectionne.";
     exit;
 }
-// Requete pour recuperer les details de l'etudiant
-$req = $_bd->prepare("SELECT * FROM student WHERE id = ?");
-$req->execute([$id]);
-$etudiant = $req->fetch(PDO::FETCH_ASSOC);
+// Requete simple pour recuperer les details de l'etudiant
+$req = "SELECT * FROM student WHERE id = $id";
+$rep = $_bd->query($req);
+$etudiant = $rep->fetch(PDO::FETCH_ASSOC);
 
-if (!$etudiant) {
-    echo "Étudiant non trouvé.";
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,10 +19,13 @@ if (!$etudiant) {
 </head>
 <body>
     <h1>Details de l'etudiant</h1>
-    <p><strong>ID :</strong> <?= $etudiant['id'] ?></p>
-    <p><strong>Nom :</strong> <?= $etudiant['name'] ?></p>
-    <p><strong>Date de naissance :</strong> <?= $etudiant['birthday'] ?></p>
-
+    <?php if ($etudiant): ?>
+        <p><strong>ID :</strong> <?= $etudiant['id'] ?></p>
+        <p><strong>Nom :</strong> <?= $etudiant['name'] ?></p>
+        <p><strong>Date de naissance :</strong> <?= $etudiant['birthday'] ?></p>
+    <?php else: ?>
+        <p style="color:red;">Étudiant introuvable</p>
+    <?php endif; ?>
     <a href="index.php">⬅ Retour à la liste</a>
 </body>
 </html>
