@@ -1,5 +1,6 @@
 <?php
 include "autoloader.php";
+//requete pour recuperer les etudiants
 $_bdd = ConnexionBD::getInstance();
 $rep = $_bdd->query("SELECT * FROM student");
 $students = $rep->fetchAll(PDO::FETCH_ASSOC);
