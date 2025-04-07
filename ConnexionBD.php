@@ -3,7 +3,7 @@
 class ConnexionBD{
     private static $_dbname="school";
     private static $_user= "root";
-    private static $_pwd="558";
+    private static $_pwd="EmnaGraja123..";
     private static $_host="localhost";
     private static $_bdd=null;
     private function __construct(){
