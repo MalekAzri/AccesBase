@@ -1,5 +1,5 @@
 <?php
-// Connexion à la base de données
+// Connexion à la base de donnees
 class ConnexionBD{
     private static $_dbname="school";
     private static $_user= "root";
