@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
 #launch.json folder
@@ -20,3 +21,9 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+=======
+node_modules/
+package-lock.json
+package.json
+gitignore
+>>>>>>> 89104db59c0f6eccf82ec966821ce12fab3032a7

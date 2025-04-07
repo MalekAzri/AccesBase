@@ -1,7 +1,18 @@
+<<<<<<< HEAD
+=======
+<?php
+include "autoloader.php";
+$_bdd = ConnexionBD::getInstance(); //instanciation d'une base de donnee
+//requete pour recuperer les etudiants
+$rep = $_bdd->query("SELECT * FROM student"); 
+$students = $rep->fetchAll(PDO::FETCH_ASSOC);
+?>
+>>>>>>> 89104db59c0f6eccf82ec966821ce12fab3032a7
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Combat Pokémon - Dracaufeu Gigamus</title>
     <style>
@@ -232,3 +243,28 @@
     </div>
 </body>
 </html>
+=======
+    <title>Liste des étudiants</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Liste des étudiants</h1>
+    <table class="table table-striped">
+        <tr class="table-success">
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Birthday</th>
+            <th></th>
+        </tr>
+        <?php foreach ($students as $student): ?>
+            <tr class="table-success">
+                <td><?= htmlspecialchars($student['id']) ?></td>
+                <td><?= htmlspecialchars($student['name']) ?></td>
+                <td><?= htmlspecialchars($student['birthday']) ?></td>
+                <td><a href="detailEtudiant.php?id=<?= $student['id'] ?>">Details</a></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</body>
+</html>
+>>>>>>> 89104db59c0f6eccf82ec966821ce12fab3032a7
