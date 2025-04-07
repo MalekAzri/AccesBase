@@ -8,4 +8,10 @@ function load2(String $IRepository){
     include_once "IRepository.php";
 }
 spl_autoload_register("load2");
+
+function load3(String $Etudiant){
+    include_once "Etudiant.php";
+}
+spl_autoload_register("load3");
+
 ?>
