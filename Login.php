@@ -1,7 +1,10 @@
 
 <?php
 session_start();
-$_SESSION["utilisateurs"]=[];
+session_start();
+if (!isset($_SESSION["utilisateurs"])) {
+    $_SESSION["utilisateurs"] = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -54,16 +57,19 @@ $_SESSION["utilisateurs"]=[];
 </html>
 <?php
 if(isset($_POST["connect"])){
+    $trouve = false;
     foreach($_SESSION['utilisateurs'] as $user){
         if($user['id']==$_POST['id']){
-            if(user['username']!=$_POST['username'] ){
+            $trouve = true;
+
+            if($user['username']!=$_POST['username'] ){
                 echo "Nom d'utilisateur incorrect";
             }
             elseif($user['email']!=$_POST['email']){
                 echo "Email incorrect";
 
             } 
-            elseif(user['role']!=$_POST['role'] ){
+            elseif($user['role']!=$_POST['role'] ){
                 echo "Rôle incorrect";
             }
             elseif($user['password']!=$_POST['password']){
