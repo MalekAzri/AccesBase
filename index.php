@@ -19,12 +19,14 @@ $students = $rep->fetchAll(PDO::FETCH_ASSOC);
             <th>ID</th>
             <th>Nom</th>
             <th>Birthday</th>
+            <th></th>
         </tr>
         <?php foreach ($students as $student): ?>
             <tr class="table-success">
                 <td><?= htmlspecialchars($student['id']) ?></td>
                 <td><?= htmlspecialchars($student['name']) ?></td>
                 <td><?= htmlspecialchars($student['birthday']) ?></td>
+                <td><a href="detailEtudiant.php?id=<?= $student['id'] ?>">Details</a></td>
             </tr>
         <?php endforeach; ?>
     </table>
