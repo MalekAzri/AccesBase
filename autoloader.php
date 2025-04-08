@@ -1,9 +1,10 @@
 <?php
-function load1(string $ConnexionBD)
-{
-    include_once "ConnexionBD.php";
+if (!function_exists('load1')) {
+    function load1(string $ConnexionBD) {
+        include_once $ConnexionBD . '.php';
+    }
+    spl_autoload_register('load1');
 }
-spl_autoload_register('load1'); 
 function load2(String $IRepository){
     include_once "IRepository.php";
 }
