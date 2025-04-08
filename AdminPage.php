@@ -1,9 +1,11 @@
 <?php
 require_once 'Admin.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    $admin = new Admin(1, "Emna", "emna@mail.com", "admin"); // Exemple d'initialisation
+// Instantiate the $admin object outside the POST block
+Admin::initialize(); // Initialize the database connection and repositories
+$admin = new Admin(1, "Emna", "emna@mail.com", "admin"); // Ensure the object is created properly
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'addEtudiant':
             $etudiantData = json_decode($_POST['etudiantData'], true);
@@ -82,85 +84,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <h1 class="mb-4">Liste des Étudiants</h1>
         
         <!-- Tableau des étudiants -->
-        <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Email</th>
-                    <th>Section</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Récupération des étudiants via la méthode de la classe Admin
-                $students = $admin->getAllStudents(); 
-                if (!empty($students)) {
-                    foreach ($students as $student) {
-                        echo "<tr>
-                            <td>{$student['id']}</td>
-                            <td>{$student['name']}</td>
-                            <td>{$student['email']}</td>
-                            <td>{$student['section']}</td>
-                            <td>
-                                <!-- Bouton pour supprimer un étudiant -->
-                                <form method='POST' action='' class='d-inline'>
-                                    <input type='hidden' name='id' value='{$student['id']}'>
-                                    <button type='submit' name='deleteStudent' class='btn btn-danger btn-sm'>Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5' class='text-center'>Aucun étudiant trouvé</td></tr>";
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Birthday</th>
+                <th>Section</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Récupère tous les étudiants
+            $students = $admin->getAllStudents(); 
+            if (!empty($students)) {
+                foreach ($students as $student) {
+                    echo "<tr>
+                        <td>{$student['id']}</td>
+                        <td><img src='{$student['image']}' alt='{$student['name']}' class='student-image'></td>
+                        <td>{$student['name']}</td>
+                        <td>{$student['birthday']}</td>
+                        <td>{$student['section']}</td>
+                        <td class='text-center'>
+                            <a href='#' class='btn btn-sm btn-info'><i class='bi bi-info-circle'></i></a>
+                            <a href='#' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
+                            <a href='#' class='btn btn-sm btn-danger'><i class='bi bi-trash'></i></a>
+                        </td>
+                    </tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </div>
+            } else {
+                echo "<tr><td colspan='6' class='text-center'>Aucun étudiant trouvé</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
 
-
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Birthday</th>
-                        <th>Section</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><img src="https://via.placeholder.com/30" alt="Aymen" class="student-image"></td>
-                        <td>Aymen</td>
-                        <td>1982-02-07</td>
-                        <td>GI</td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-info"><i class="bi bi-info-circle"></i></a>
-                            <a href="#" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><img src="https://via.placeholder.com/30" alt="Skander" class="student-image"></td>
-                        <td>Skander</td>
-                        <td>2018-07-11</td>
-                        <td>GI</td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-info"><i class="bi bi-info-circle"></i></a>
-                            <a href="#" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
         <div class="d-flex justify-content-between align-items-center">
             <div>Showing 1 to 2 of 2 entries</div>

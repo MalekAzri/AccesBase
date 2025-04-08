@@ -2,17 +2,19 @@
 include "autoloader.php";
  class Admin extends User {
 
-    public static ConnexionBD $pdo; // connexion a la base de donnees
-    public static Repository $repoEtudiant; // repository pour les etudiants
-
-    public static Repository $repoSection;
+    public static  $pdo; // connexion a la base de donnees
+    public static  $repoEtudiant; // repository pour les etudiants
+    public static  $repoSection;
 
     public function __construct($id, $name, $email, $role) {	
         parent::__construct($id, $name, $email, "admin"); // je considere que le username est le nom de l'administrateur
+
+    }
+    public static function initialize(){
         if (self::$pdo === null) {
             self::$pdo = ConnexionBD::getInstance(); // initialize pdo if not already done
-           self::$repoEtudiant = new Repository("etudiant", self::$pdo); // initialize repository for students
-              self::$repoSection = new Repository("section", self::$pdo); // initialize repository for sections
+            self::$repoEtudiant = new Repository("etudiant", self::$pdo); // initialize repository for students
+            self::$repoSection = new Repository("section", self::$pdo); // initialize repository for sections
         }
     }
 
@@ -20,8 +22,8 @@ include "autoloader.php";
         return self::$repoEtudiant->findAll();
     }
     public function getAllStudents() {
-        $query = "SELECT id, name, email, section FROM students";
-        $stmt = $this->connexion->prepare($query);
+        $query = "SELECT etudiant.id, name, email,birthday,image, designation as section  FROM etudiant,section WHERE etudiant.section = section.id";
+        $stmt = self::$pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -65,6 +67,7 @@ include "autoloader.php";
             throw new Exception("Section not found with ID: $id");
         }
     }
+   
 
     
   

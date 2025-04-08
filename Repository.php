@@ -1,7 +1,7 @@
 <?php
 include 'autoloader.php';
 class Repository implements iRepository{
-    public function __construct(public String $tableName="",public ConnexionBD $connexion){
+    public function __construct(public String $tableName="",public PDO $connexion){
     }
     
     public function findAll(): array
