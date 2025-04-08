@@ -1,3 +1,8 @@
+<?php
+include_once 'Etudiant.php'; 
+$etudiant = new Etudiant(); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,5 +87,47 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td><img src="https://via.placeholder.com/30" alt="Aymen" class="student-image"></td>
+        <td>Aymen</td>
+        <td>1982-02-07</td>
+        <td>GI</td>
+        <td class="text-center">
+            <!-- Bouton pour exporter en PDF -->
+            <form action="EtudiantExport.php" method="POST" class="d-inline">
+                <input type="hidden" name="action" value="exportPDF">
+                <input type="hidden" name="id" value="1"> <!-- ID de l'étudiant -->
+                <button class="btn btn-sm btn-danger"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
+            </form>
+
+            <!-- Bouton pour exporter en Excel -->
+            <form action="EtudiantExport.php" method="POST" class="d-inline">
+                <input type="hidden" name="action" value="exportExcel">
+                <input type="hidden" name="id" value="1"> <!-- ID de l'étudiant -->
+                <button class="btn btn-sm btn-success"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+            </form>
+
+            <!-- Bouton pour exporter en CSV -->
+            <form action="EtudiantExport.php" method="POST" class="d-inline">
+                <input type="hidden" name="action" value="exportCSV">
+                <input type="hidden" name="id" value="1"> <!-- ID de l'étudiant -->
+                <button class="btn btn-sm btn-primary"><i class="bi bi-file-earmark-spreadsheet"></i> CSV</button>
+            </form>
+        </td>
+    </tr>
+</tbody>
+<?php
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['viewSections'])) {
+                $sections = $etudiant->viewSections(); // Fetch sections
+                echo "<ul class='list-group'>";
+                foreach ($sections as $section) {
+                    echo "<li class='list-group-item'>{$section['name']}</li>";
+                }
+                echo "</ul>";
+            }
+            ?>
 </body>
 </html>
