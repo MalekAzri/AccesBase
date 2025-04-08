@@ -19,7 +19,12 @@ include "autoloader.php";
     public function getEtudiants(){
         return self::$repoEtudiant->findAll();
     }
-
+    public function getAllStudents() {
+        $query = "SELECT id, name, email, section FROM students";
+        $stmt = $this->connexion->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function addEtudiant(Etudiant $e){
         $data = $e->getInfo();//getInfo() retourne un tableau associatif contenant les informations de l'étudiant
         self::$repoEtudiant->create($data);   

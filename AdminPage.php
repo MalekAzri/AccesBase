@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'addEtudiant':
             $etudiantData = json_decode($_POST['etudiantData'], true);
-            $etudiant = new Etudiant($etudiantData['id'], $etudiantData['name'], $etudiantData['email'], $etudiantData['section']);
+            $etudiant = new Etudiant($etudiantData['id'], $etudiantData['name'], $etudiantData['email'], $etudiantData['section'], $etudiantData['birthday'], $etudiantData['image']);
             $admin->addEtudiant($etudiant);
             echo "Étudiant ajouté avec succès.";
             break;
@@ -77,6 +77,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             <button class="btn btn-secondary me-2">CSV</button>
             <button class="btn btn-secondary">PDF</button>
         </div>
+
+        <div class="container mt-5">
+        <h1 class="mb-4">Liste des Étudiants</h1>
+        
+        <!-- Tableau des étudiants -->
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Section</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Récupération des étudiants via la méthode de la classe Admin
+                $students = $admin->getAllStudents(); 
+                if (!empty($students)) {
+                    foreach ($students as $student) {
+                        echo "<tr>
+                            <td>{$student['id']}</td>
+                            <td>{$student['name']}</td>
+                            <td>{$student['email']}</td>
+                            <td>{$student['section']}</td>
+                            <td>
+                                <!-- Bouton pour supprimer un étudiant -->
+                                <form method='POST' action='' class='d-inline'>
+                                    <input type='hidden' name='id' value='{$student['id']}'>
+                                    <button type='submit' name='deleteStudent' class='btn btn-danger btn-sm'>Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='5' class='text-center'>Aucun étudiant trouvé</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
 
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
