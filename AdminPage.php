@@ -1,3 +1,49 @@
+<?php
+require_once 'Admin.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $admin = new Admin(1, "Emna", "emna@mail.com", "admin"); // Exemple d'initialisation
+
+    switch ($_POST['action']) {
+        case 'addEtudiant':
+            $etudiantData = json_decode($_POST['etudiantData'], true);
+            $etudiant = new Etudiant($etudiantData['id'], $etudiantData['name'], $etudiantData['email'], $etudiantData['section']);
+            $admin->addEtudiant($etudiant);
+            echo "Étudiant ajouté avec succès.";
+            break;
+
+        case 'deleteEtudiant':
+            $id = $_POST['id'];
+            $admin->deleteEtudiant($id);
+            echo "Étudiant supprimé avec succès.";
+            break;
+
+        case 'getEtudiantById':
+            $id = $_POST['id'];
+            $etudiant = $admin->getEtudiantById($id);
+            if ($etudiant) {
+                echo "Informations de l'étudiant : " . json_encode($etudiant);
+            } else {
+                echo "Étudiant non trouvé.";
+            }
+            break;
+
+        case 'updateEtudiant':
+            $id = $_POST['id'];
+            $etudiantData = json_decode($_POST['etudiantData'], true);
+            try {
+                $admin->updateEtudiant($id, $etudiantData);
+                echo "Étudiant mis à jour avec succès.";
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            break;
+
+        default:
+            echo "Action non reconnue.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,6 +130,33 @@
             </nav>
         </div>
     </div>
+    
+    <form action="Admin.php" method="POST" class="d-inline">
+    <input type="hidden" name="action" value="addEtudiant">
+    <input type="hidden" name="etudiantData" value='{"id":3,"name":"John","email":"john@example.com","section":"GI"}'>
+    <button class="btn btn-secondary">Ajouter Étudiant</button>
+    
+    <!-- Supprimer un etudiant-->
+<form action="Admin.php" method="POST" class="d-inline">
+    <input type="hidden" name="action" value="deleteEtudiant">
+    <input type="hidden" name="id" value="1"> <!-- Remplacez 1 par l'ID de l'étudiant à supprimer -->
+    <button class="btn btn-sm btn-danger">Supprimer Étudiant</button>
+</form>
+
+<!-- avoir les informations d'un etudiant -->
+<form action="Admin.php" method="POST" class="d-inline">
+    <input type="hidden" name="action" value="getEtudiantById">
+    <input type="hidden" name="id" value="1"> <!-- Remplacez 1 par l'ID de l'étudiant à récupérer -->
+    <button class="btn btn-sm btn-info">Voir Étudiant</button>
+</form>
+
+<!-- mettre à jour un etudiant -->
+<form action="Admin.php" method="POST" class="d-inline">
+    <input type="hidden" name="action" value="updateEtudiant">
+    <input type="hidden" name="id" value="1"> <!-- Remplacez 1 par l'ID de l'étudiant à mettre à jour -->
+    <input type="hidden" name="etudiantData" value='{"name":"Updated Name","email":"updated@example.com","section":"Updated Section"}'>
+    <button class="btn btn-sm btn-primary">Mettre à jour Étudiant</button>
+</form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

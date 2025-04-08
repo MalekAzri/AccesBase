@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
 #launch.json folder
@@ -21,9 +20,44 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
-=======
-node_modules/
-package-lock.json
-package.json
-gitignore
->>>>>>> 89104db59c0f6eccf82ec966821ce12fab3032a7
+.VirtualBox/
+.cache/
+.designer/
+.eclipse/
+.gitconfig
+.lesshst
+.lim/
+.limpc/
+.m2/
+.p2/
+AppData/
+CLionProjects/
+Contacts/
+Downloads/
+Favorites/
+FileManager.java
+IdeaProjects/
+IntelGraphicsProfiles/
+Links/
+Music/
+NTUSER.DAT
+NTUSER.DAT{f4ffa61e-bf4d-11ef-a1ae-896e23173cb5}.TM.blf
+NTUSER.DAT{f4ffa61e-bf4d-11ef-a1ae-896e23173cb5}.TMContainer00000000000000000001.regtrans-ms
+NTUSER.DAT{f4ffa61e-bf4d-11ef-a1ae-896e23173cb5}.TMContainer00000000000000000002.regtrans-ms
+OneDrive/
+PycharmProjects/
+PycharmProjectsm/
+Saved Games/
+Searches/
+Videos/
+VirtualBox VMs/
+eclipse-workspace/
+eclipse/
+iCloudDrive/
+iCloudPhotos/
+ntuser.dat.LOG1
+ntuser.dat.LOG2
+ntuser.ini
+pokemon_php/
+*.log
+        
