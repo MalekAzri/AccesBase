@@ -2,51 +2,57 @@
 require_once 'Admin.php';
 
 // Instantiate the $admin object outside the POST block
-Admin::initialize(); // Initialize the database connection and repositories
-$admin = new Admin(1, "Emna", "emna@mail.com", "admin"); // Ensure the object is created properly
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    switch ($_POST['action']) {
-        case 'addEtudiant':
-            header("location: AjouterEtudiant.php");
-            break;
-
-        case 'deleteEtudiant':
-            deleteEtudiant($_POST['id']);
-            break;
-
-        case 'getEtudiantById':
-            $id = $_POST['id'];
-            $etudiant = $admin->getEtudiantById($id);
-            if ($etudiant) {
-                echo "Informations de l'étudiant : " . json_encode($etudiant);
-            } else {
-                echo "Étudiant non trouvé.";
-            }
-            break;
-
-        case 'updateEtudiant':
-            $id = $_POST['id'];
-            $_GET['id'] = $student['id']; // Set the ID for the GET request
-            $etudiantData = json_decode($_POST['etudiantData'], true);
-            try {
-                $admin->updateEtudiant($id, $etudiantData);
-                echo "Étudiant mis à jour avec succès.";
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-            break;
-        default:
-            echo "Action non reconnue.";
-
-    
-    }
+$admin = new Admin(1, "Emna", "emna@mail.com", "admin");
+Admin::initialize(); // Initialize the database connection
+// Recherche d'étudiant
+$students = $admin->getAllStudents(); // Récupérer tous les étudiants au départ
+if (isset($_POST['search']) && !empty($_POST['search'])) {
+    // Si une recherche est effectuée, filtrer les étudiants par nom
+    $searchTerm = $_POST['search'];
+    $students = array_filter($students, function($student) use ($searchTerm) {
+        return stripos($student['name'], $searchTerm) !== false; // Recherche insensible à la casse
+    });
 }
-function deleteEtudiant($id):void {
+
+switch ($_POST['action'] ?? '') {
+    case 'addEtudiant':
+        header("location: AjouterEtudiant.php");
+        break;
+
+    case 'deleteEtudiant':
+        deleteEtudiant($_POST['id']);
+        break;
+
+    case 'getEtudiantById':
+        $id = $_POST['id'];
+        $etudiant = $admin->getEtudiantById($id);
+        if ($etudiant) {
+            echo "Informations de l'étudiant : " . json_encode($etudiant);
+        } else {
+            echo "Étudiant non trouvé.";
+        }
+        break;
+
+    case 'updateEtudiant':
+        $id = $_POST['id'];
+        $_GET['id'] = $student['id']; // Set the ID for the GET request
+        $etudiantData = json_decode($_POST['etudiantData'], true);
+        try {
+            $admin->updateEtudiant($id, $etudiantData);
+            echo "Étudiant mis à jour avec succès.";
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        break;
+
+    default:
+        echo "Action non reconnue.";
+}
+
+function deleteEtudiant($id): void {
     global $admin; // Access the global $admin object
-        $admin->deleteEtudiant($id);
-        echo "Étudiant supprimé avec succès.";
-   
+    $admin->deleteEtudiant($id);
+    echo "Étudiant supprimé avec succès.";
 }
 ?>
 <!DOCTYPE html>
@@ -71,8 +77,10 @@ function deleteEtudiant($id):void {
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Liste des étudiants</h2>
             <div class="input-group w-auto">
-                <input type="text" class="form-control" placeholder="Search...">
-                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+                <form action="AdminPage.php" method="POST" class="w-100">
+                    <input type="text" class="form-control" name="search" placeholder="Enter Name...">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                </form>
             </div>
         </div>
 
@@ -108,7 +116,6 @@ function deleteEtudiant($id):void {
                     <tbody>
                         <?php
                         // Récupère tous les étudiants
-                        $students = $admin->getAllStudents(); 
                         if (!empty($students)) {
                             foreach ($students as $student) {
                                 echo "<tr data-id='{$student['id']}'>
@@ -120,14 +127,14 @@ function deleteEtudiant($id):void {
                                     <td class='text-center'>
                                         <a href='voir_etudiant.php?id={$student['id']}' class='btn btn-sm btn-info'><i class='bi bi-info-circle'></i></a>
                                         <a href='modifier_etudiant.php?id={$student['id']}' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
-<form action='AdminPage.php' method='POST' style='display:inline;'>
-        <input type='hidden' name='action' value='deleteEtudiant'>
-        <input type='hidden' name='id' value='" . htmlspecialchars($student['id'], ENT_QUOTES, 'UTF-8') . "'>
-        <button type='submit' class='btn btn-sm btn-danger' onclick=\"return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?');\">
-            <i class='bi bi-trash'></i>
-        </button>
-    </form>                            
-     </td>
+                                        <form action='AdminPage.php' method='POST' style='display:inline;'>
+                                            <input type='hidden' name='action' value='deleteEtudiant'>
+                                            <input type='hidden' name='id' value='" . htmlspecialchars($student['id'], ENT_QUOTES, 'UTF-8') . "'>
+                                            <button type='submit' class='btn btn-sm btn-danger' onclick=\"return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?');\">
+                                                <i class='bi bi-trash'></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>";
                             }
                         } else {
@@ -139,12 +146,11 @@ function deleteEtudiant($id):void {
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-                <div>Showing 1 to 2 of 2 entries</div>
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
                         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                         <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="SectionsForAdmin.php">Next</a></li> <!-- Modified link -->
                     </ul>
                 </nav>
             </div>
@@ -156,7 +162,6 @@ function deleteEtudiant($id):void {
         <button class="btn btn-success">Ajouter Étudiant</button>
     </form>
 
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -21,17 +21,22 @@ class Repository implements iRepository{
     }
 
     public function create(array $data):void {
-        // Validation et formatage de la date
-        if (isset($data['birthday'])) {
-            $data['birthday'] = DateTime::createFromFormat('Y-m-d', $data['birthday'])->format('Y-m-d');
-        }
+        $columns = array_keys($data); // ['id', 'designation', 'description']
+        $placeholders = array_map(function($col) { return ':' . $col; }, $columns);
+    
+        $query = "INSERT INTO {$this->tableName} (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
         
-        // Requête d'insertion
-        $query = "INSERT INTO " . $this->tableName . " (id, name, email, birthday, image, section) 
-                  VALUES (:id, :name, :email, :birthday, :image, :section)";
         $stmt = $this->connexion->prepare($query);
-        $stmt->execute($data);
+    
+        $params = [];
+        foreach ($columns as $col) {
+            $params[":$col"] = $data[$col]; // liaison correcte des paramètres
+        }
+        var_dump($query);
+        $stmt->execute($params);
     }
+    
+    
     
 
     public function delete(int $id): void

@@ -1,5 +1,6 @@
 <?php
 include "autoloader.php";
+include_once "Section.php";
  class Admin extends User {
 
     public static  $pdo; // connexion a la base de donnees
@@ -50,7 +51,7 @@ include "autoloader.php";
     public function getSections(){
         return self::$repoSection->findAll();
     }
-    public function addSection($data){
+    public function addSection(array $data){
         self::$repoSection->create($data);
     }
     public function deleteSection($id){
@@ -75,6 +76,5 @@ include "autoloader.php";
     
 }
 
-include_once "EtudiantExport.php";
 
 ?>
