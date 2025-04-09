@@ -58,7 +58,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'deleteSection') {
                     <td><?= $section['designation'] ?></td>
                     <td><?= $section['description'] ?></td>
                     <td>
-                        <a href="voir_section.php?id=<?= $section['id'] ?>" class="btn btn-info">Voir</a>
+                        <a href="voir_sectionAdmin.php?id=<?= $section['id'] ?>" class="btn btn-info">Voir</a>
                         <a href="modifier_section.php?id=<?= $section['id'] ?>" class="btn btn-primary">Modifier</a>
                         <form action="SectionsForAdmin.php" method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="deleteSection">

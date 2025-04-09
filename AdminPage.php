@@ -35,7 +35,7 @@ switch ($_POST['action'] ?? '') {
 
     case 'updateEtudiant':
         $id = $_POST['id'];
-        $_GET['id'] = $student['id']; // Set the ID for the GET request
+        $_GET['id'] = $student['id']; // Définir l'ID pour la requête GET
         $etudiantData = json_decode($_POST['etudiantData'], true);
         try {
             $admin->updateEtudiant($id, $etudiantData);
@@ -49,6 +49,7 @@ switch ($_POST['action'] ?? '') {
         echo "Action non reconnue.";
 }
 
+// Fonction de suppression d'étudiant
 function deleteEtudiant($id): void {
     global $admin; // Access the global $admin object
     $admin->deleteEtudiant($id);
@@ -60,7 +61,7 @@ function deleteEtudiant($id): void {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student List</title>
+    <title>Liste des Étudiants</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -78,7 +79,7 @@ function deleteEtudiant($id): void {
             <h2>Liste des étudiants</h2>
             <div class="input-group w-auto">
                 <form action="AdminPage.php" method="POST" class="w-100">
-                    <input type="text" class="form-control" name="search" placeholder="Enter Name...">
+                    <input type="text" class="form-control" name="search" placeholder="Entrer le nom..." value="<?php echo htmlspecialchars($_POST['search'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
                 </form>
             </div>
@@ -107,15 +108,15 @@ function deleteEtudiant($id): void {
                         <tr>
                             <th>ID</th>
                             <th>Image</th>
-                            <th>Name</th>
-                            <th>Birthday</th>
+                            <th>Nom</th>
+                            <th>Date de naissance</th>
                             <th>Section</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        // Récupère tous les étudiants
+                        // Afficher les étudiants filtrés
                         if (!empty($students)) {
                             foreach ($students as $student) {
                                 echo "<tr data-id='{$student['id']}'>
@@ -148,9 +149,9 @@ function deleteEtudiant($id): void {
             <div class="d-flex justify-content-between align-items-center">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Précédent</a></li>
                         <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="SectionsForAdmin.php">Next</a></li> <!-- Modified link -->
+                        <li class="page-item"><a class="page-link" href="SectionsForAdmin.php">Suivant</a></li>
                     </ul>
                 </nav>
             </div>
@@ -159,7 +160,7 @@ function deleteEtudiant($id): void {
 
     <form action="AjouterEtudiant.php" method="GET" class="d-inline">
         <input type="hidden" name="action" value="addEtudiant">
-        <button class="btn btn-success">Ajouter Étudiant</button>
+        <button class="btn btn-success">Ajouter un étudiant</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
