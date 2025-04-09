@@ -20,17 +20,19 @@ class Repository implements iRepository{
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    public function create(array $data): void
-    {
-        $columns = implode(", ", array_keys($data));//on obtient la chaine key_name1,key_name2
-        $placeholders = ":" . implode(", :", array_keys($data));//on obtient la chaine :key_name1,:key_name2
-        $query = "INSERT INTO " . $this->tableName . " ($columns) VALUES ($placeholders)";//on obtient la chaine INSERT INTO table_name (key_name1,key_name2) VALUES (:key_name1,:key_name2)
-        $stmt = $this->connexion->prepare($query);//pour eviter les injections SQL
-        foreach ($data as $key => $value) {
-            $stmt->bindParam(":$key", $value);
+    public function create(array $data):void {
+        // Validation et formatage de la date
+        if (isset($data['birthday'])) {
+            $data['birthday'] = DateTime::createFromFormat('Y-m-d', $data['birthday'])->format('Y-m-d');
         }
-        $stmt->execute();
+        
+        // Requête d'insertion
+        $query = "INSERT INTO " . $this->tableName . " (id, name, email, birthday, image, section) 
+                  VALUES (:id, :name, :email, :birthday, :image, :section)";
+        $stmt = $this->connexion->prepare($query);
+        $stmt->execute($data);
     }
+    
 
     public function delete(int $id): void
     {
@@ -40,7 +42,30 @@ class Repository implements iRepository{
         $stmt->execute();
     }
     
+    public function update(int $id, array $data): bool
+    {
+        // Construire la partie SET de la requête SQL
+        $setClause = [];
+        foreach ($data as $column => $value) {
+            $setClause[] = "$column = :$column";
+        }
+        $setClause = implode(", ", $setClause); // Concaténer les colonnes et valeurs
 
+        // Construire la requête SQL avec WHERE pour spécifier quel enregistrement mettre à jour
+        $query = "UPDATE " . $this->tableName . " SET $setClause WHERE id = :id";
+        $stmt = $this->connexion->prepare($query);
+
+        // Lier les valeurs de chaque colonne à la requête
+        foreach ($data as $column => $value) {
+            $stmt->bindValue(":$column", $value);
+        }
+
+        // Lier l'ID pour la condition WHERE
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+        // Exécuter la requête et retourner le résultat
+        return $stmt->execute();
+    }
 
     
 
