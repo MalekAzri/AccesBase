@@ -30,4 +30,13 @@ CREATE TABLE etudiant (
     section_id INT,
     FOREIGN KEY (section_id) REFERENCES section(id) ON DELETE SET NULL
 );
-
+INSERT INTO etudiant (id,name,birthday,src_image,alt_image,section)Values
+(1, 'Malek','2004-10-8',"images\photomalek.jpg","photo1" ,'GL'),
+(2, 'Emna','2005-01-01',"images\photoemna.jpg","photo2" ,'GL'),
+(3, 'Emna','2004-07-21',"images\photoemnaa.jpg","photo3",'GL');
+INSERT INTO section (id,designation,description)Values
+(1,'GL','Genie Logiciel'),
+(2,'RT','Reseaux et Telecommunications'),
+(3,'IIA','Informatique Industrielle et Automatique'),
+(4,'IMI','Instrumentation et Maintenance Industrielle');
+SHOW TABLES;
