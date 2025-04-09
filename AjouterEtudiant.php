@@ -17,6 +17,7 @@ if (isset($_GET['add']) && $_SERVER['REQUEST_METHOD'] === 'GET' ) {
         );
         $admin->addEtudiant($etudiant);
         echo "Étudiant ajouté avec succès.";
+        header("Location: AdminPage.php"); // Redirige vers la page d'administration après l'ajout
     } 
 
 ?>

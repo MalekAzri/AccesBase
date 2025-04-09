@@ -12,9 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             break;
 
         case 'deleteEtudiant':
-            $id = $_POST['id'];
-            $admin->deleteEtudiant($id);
-            echo "Étudiant supprimé avec succès.";
+            deleteEtudiant($_POST['id']);
             break;
 
         case 'getEtudiantById':
@@ -38,10 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 echo $e->getMessage();
             }
             break;
-
         default:
             echo "Action non reconnue.";
+
+    
     }
+}
+function deleteEtudiant($id):void {
+    global $admin; // Access the global $admin object
+        $admin->deleteEtudiant($id);
+        echo "Étudiant supprimé avec succès.";
+   
 }
 ?>
 <!DOCTYPE html>
@@ -106,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                         $students = $admin->getAllStudents(); 
                         if (!empty($students)) {
                             foreach ($students as $student) {
-                                echo "<tr>
+                                echo "<tr data-id='{$student['id']}'>
                                     <td>{$student['id']}</td>
                                     <td><img src='{$student['image']}' alt='{$student['name']}' class='student-image'></td>
                                     <td>{$student['name']}</td>
@@ -115,8 +120,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                     <td class='text-center'>
                                         <a href='voir_etudiant.php?id={$student['id']}' class='btn btn-sm btn-info'><i class='bi bi-info-circle'></i></a>
                                         <a href='modifier_etudiant.php?id={$student['id']}' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
-                                        <a href='#' class='btn btn-sm btn-danger' onclick='deleteEtudiant({$student['id']})'><i class='bi bi-trash'></i></a>
-                                    </td>
+<form action='AdminPage.php' method='POST' style='display:inline;'>
+        <input type='hidden' name='action' value='deleteEtudiant'>
+        <input type='hidden' name='id' value='" . htmlspecialchars($student['id'], ENT_QUOTES, 'UTF-8') . "'>
+        <button type='submit' class='btn btn-sm btn-danger' onclick=\"return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?');\">
+            <i class='bi bi-trash'></i>
+        </button>
+    </form>                            
+     </td>
                                 </tr>";
                             }
                         } else {
@@ -140,35 +151,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         </div>
     </div>
 
-    <script>
-        function deleteEtudiant(id) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer cet étudiant ?")) {
-                var form = document.createElement("form");
-                form.method = "POST";
-                form.action = "Admin.php";
-                
-                var inputAction = document.createElement("input");
-                inputAction.type = "hidden";
-                inputAction.name = "action";
-                inputAction.value = "deleteEtudiant";
-                form.appendChild(inputAction);
-
-                var inputId = document.createElement("input");
-                inputId.type = "hidden";
-                inputId.name = "id";
-                inputId.value = id;
-                form.appendChild(inputId);
-
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-    </script>
-       <form action="AjouterEtudiant.php" method="GET" class="d-inline">
+    <form action="AjouterEtudiant.php" method="GET" class="d-inline">
         <input type="hidden" name="action" value="addEtudiant">
-            <button class="btn btn-success">Ajouter Étudiant</button>
-        </form>
+        <button class="btn btn-success">Ajouter Étudiant</button>
+    </form>
 
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
